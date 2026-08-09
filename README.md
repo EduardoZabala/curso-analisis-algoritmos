@@ -14,3 +14,14 @@ El repositorio mantiene la siguiente organización de carpetas:
   incluyendo los ejercicios de Python de la Semana 2.
 - `benchmarks/`: scripts compartidos de medición de tiempos y graficación,
   reutilizados en los laboratorios evaluativos.
+
+## Estructura del proyecto
+
+```
+curso-analisis-algoritmos/
+├── laboratorios/
+├── ejercicios-clase/
+├── benchmarks/
+├── README.md
+└── .gitignore
+```
