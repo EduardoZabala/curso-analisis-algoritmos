@@ -26,6 +26,15 @@ curso-analisis-algoritmos/
 └── .gitignore
 ```
 
+## Cómo clonar el proyecto
+
+Para obtener una copia local del repositorio, ejecute:
+
+```bash
+git clone https://github.com/EduardoZabala/curso-analisis-algoritmos.git
+cd curso-analisis-algoritmos
+```
+
 ## Autor
 
 - **Nombre:** Jhon Eduardo Zabala Garzon
