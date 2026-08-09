@@ -25,3 +25,9 @@ curso-analisis-algoritmos/
 ├── README.md
 └── .gitignore
 ```
+
+## Autor
+
+- **Nombre:** Jhon Eduardo Zabala Garzon
+- **Correo:** jhonzabala329026@correo.itm.edu.co
+- **Grupo de Análisis:** 190304006-1
