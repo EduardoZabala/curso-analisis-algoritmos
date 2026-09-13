@@ -8,6 +8,9 @@ Algoritmos**.
 
 El repositorio mantiene la siguiente organización de carpetas:
 
+- `lab1-fundamentos-complejidad-recurrencias/`: Laboratorio evaluativo 01 —
+  análisis de insertion sort y merge sort sobre el caso de la plataforma
+  Tamiza (informe, código instrumentado y gráficas).
 - `laboratorios/`: contiene una carpeta por cada uno de los cinco informes de
   laboratorio evaluativos del semestre.
 - `ejercicios-clase/`: código de las sesiones prácticas no evaluativas,
@@ -15,13 +18,32 @@ El repositorio mantiene la siguiente organización de carpetas:
 - `benchmarks/`: scripts compartidos de medición de tiempos y graficación,
   reutilizados en los laboratorios evaluativos.
 
+## Entorno de trabajo
+
+Las dependencias de Python se instalan en el entorno virtual de la raíz del
+repositorio y están registradas en `requirements.txt`:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
 ## Estructura del proyecto
 
 ```
 curso-analisis-algoritmos/
+├── lab1-fundamentos-complejidad-recurrencias/
+│   ├── README.md
+│   ├── algoritmos.py
+│   ├── datos.py
+│   ├── parte3_casos.py
+│   ├── parte4_complejidad.py
+│   └── graficas/
 ├── laboratorios/
 ├── ejercicios-clase/
 ├── benchmarks/
+├── requirements.txt
 ├── README.md
 └── .gitignore
 ```
