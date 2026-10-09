@@ -11,6 +11,9 @@ El repositorio mantiene la siguiente organización de carpetas:
 - `lab1-fundamentos-complejidad-recurrencias/`: Laboratorio evaluativo 01 —
   análisis de insertion sort y merge sort sobre el caso de la plataforma
   Tamiza (informe, código instrumentado y gráficas).
+- `lab2-divide-y-vencer/`: Laboratorio evaluativo 02 — subarreglo máximo por
+  fuerza bruta y por divide y vencerás sobre el caso de la cooperativa de
+  tiendas (informe, pruebas, medición y gráfica).
 - `laboratorios/`: contiene una carpeta por cada uno de los cinco informes de
   laboratorio evaluativos del semestre.
 - `ejercicios-clase/`: código de las sesiones prácticas no evaluativas,
@@ -40,6 +43,13 @@ curso-analisis-algoritmos/
 │   ├── parte3_casos.py
 │   ├── parte4_complejidad.py
 │   └── graficas/
+├── lab2-divide-y-vencer/
+│   ├── README.md
+│   ├── subarreglo.py
+│   ├── pruebas.py
+│   ├── medicion.py
+│   └── graficas/
+│       └── tiempo_vs_n.png
 ├── laboratorios/
 ├── ejercicios-clase/
 ├── benchmarks/
