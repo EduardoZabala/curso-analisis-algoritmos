@@ -14,6 +14,9 @@ El repositorio mantiene la siguiente organización de carpetas:
 - `lab2-divide-y-vencer/`: Laboratorio evaluativo 02 — subarreglo máximo por
   fuerza bruta y por divide y vencerás sobre el caso de la cooperativa de
   tiendas (informe, pruebas, medición y gráfica).
+- `lab3-estructuras-datos/`: Laboratorio evaluativo 03 — lista enlazada vs.
+  tabla hash con encadenamiento sobre el caso de Rutas del Caribe (informe,
+  estructuras, pruebas, medición y gráficas).
 - `laboratorios/`: contiene una carpeta por cada uno de los cinco informes de
   laboratorio evaluativos del semestre.
 - `ejercicios-clase/`: código de las sesiones prácticas no evaluativas,
@@ -50,6 +53,14 @@ curso-analisis-algoritmos/
 │   ├── medicion.py
 │   └── graficas/
 │       └── tiempo_vs_n.png
+├── lab3-estructuras-datos/
+│   ├── README.md
+│   ├── estructuras.py
+│   ├── pruebas.py
+│   ├── medicion.py
+│   └── graficas/
+│       ├── lista_vs_tabla.png
+│       └── tiempo_vs_alfa.png
 ├── laboratorios/
 ├── ejercicios-clase/
 ├── benchmarks/
