@@ -63,7 +63,8 @@ class TablaHash:
             m: numero de casillas de la tabla.
         """
         self.m = m
-        self.casillas: list[ListaEnlazada] = [ListaEnlazada() for _ in range(m)]
+        self.casillas: list[ListaEnlazada] = [
+            ListaEnlazada() for _ in range(m)]
         self.tamano = 0
 
     def hash(self, guia: int) -> int:
