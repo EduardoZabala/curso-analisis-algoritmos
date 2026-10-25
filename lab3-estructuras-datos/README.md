@@ -167,86 +167,89 @@ la lista, y así fue (función `control_peor_caso`, 200 búsquedas, mediana de
 
 ### 1. Costo teórico
 
-En la lista, una guía que no existe obliga a compararla con cada uno de los n
-nodos, porque solo al llegar a `None` se sabe que no está. No hay atajo: son
-exactamente n comparaciones, Θ(n).
+Si la guía no existe, la lista no lo sabe hasta llegar a `None`: la compara
+con los n nodos, uno por uno. Siempre son n comparaciones, Θ(n).
 
-En la tabla, buscar tiene dos pasos: calcular `guia % m` (Θ(1)) y recorrer la
-cadena de esa casilla. Si cada guía cae en cualquier casilla con la misma
-probabilidad, sin depender de las demás (**hash uniforme simple**), las n
-guías se reparten en m cadenas y la cadena esperada mide n/m = α. Total:
-Θ(1 + α). Si m crece con n, α no crece y la búsqueda es Θ(1) esperado.
+La tabla calcula `guia % m` (cuesta lo mismo sin importar n) y recorre solo
+la cadena de esa casilla. Para saber cuánto mide hay que suponer **hash
+uniforme simple**: cada guía cae en cualquiera de las m casillas con la misma
+probabilidad, sin importar dónde cayeron las demás. Así, n guías en m
+casillas dejan en promedio n/m = α por casilla y buscar cuesta Θ(1 + α). Si m
+crece con n, α no cambia: Θ(1) esperado.
 
-Si todas las guías cayeran en la misma casilla, esa cadena sería la lista
-original con un paso extra: Θ(n) (por ejemplo, m = 1000 y guías que
-terminan todas en `000`).
+Si todas cayeran en la misma casilla, esa cadena tendría las n guías y la
+tabla sería una lista: Θ(n). Lo comprobé en el control de la Parte 2: con
+m = 1 la tabla tardó 466,8 µs y la lista 462,9 µs.
 
 ### 2. Lo medido contra lo esperado
 
-En la primera gráfica, de n = 25.600 a n = 51.200 la lista pasó de 596,6 a
-1188,1 µs: se multiplicó por **1,99**, lo que Θ(n) predice (2). La tabla pasó
-de 0,168 a 0,172 µs: **1,02**, prácticamente constante, como Θ(1). Toda la
-cadena de duplicaciones da 1,97–2,01 para la lista y 0,92–1,08 para la tabla.
-En log-log la lista es una recta de pendiente 1 y la tabla una horizontal.
+De n = 25.600 a n = 51.200 la lista pasó de 596,6 a 1188,1 µs: **×1,99**, y
+Θ(n) dice que al duplicar n el tiempo se duplica. La tabla pasó de 0,168 a
+0,172 µs: **×1,02**, no cambió, como espera Θ(1). En las nueve duplicaciones
+la lista da entre 1,97 y 2,01 y la tabla entre 0,92 y 1,08; en log-log la
+lista es una recta que sube y la tabla queda plana.
 
-En la segunda, el tiempo sube de 0,093 µs (α = 0,25) a 0,374 µs (α = 10) y
-los puntos caen cerca de una recta: es la forma a + b·α de Θ(1 + α). La recta
-no parte de cero: `a` = 0,096 µs es el costo fijo (llamada, módulo, acceso a
-la casilla) y cada guía de la cadena suma `b` = 0,029 µs. La columna
-"cadena recorrida" confirma el supuesto: con guías aleatorias la cadena mide
-casi exactamente α.
+En la segunda gráfica, al pasar α de 0,25 a 10 el tiempo sube de 0,093 a
+0,374 µs, cerca de la recta 0,096 + 0,029·α µs. Esa es la forma de Θ(1 + α):
+0,096 µs fijos por calcular la casilla y entrar, y 0,029 µs por cada guía de
+la cadena. La columna "cadena recorrida" mide casi lo mismo que α, así que con
+mis guías aleatorias el supuesto de reparto uniforme se cumplió.
 
 ### 3. Explique las colisiones
 
-Una colisión ocurre cuando dos guías distintas dan la misma casilla. Es
-inevitable porque hay unos 9·10⁹ números de guía posibles y solo m casillas:
-muchas comparten residuo. Aunque m supere a n, dos guías concretas pueden
-coincidir: en mi medición con α = 0,25 la cadena visitada promedió 0,21, no 0.
+Hay colisión cuando dos guías distintas dan la misma casilla. Es inevitable:
+con diez dígitos hay 10¹⁰ − 10⁹ = 9·10⁹ guías posibles y solo m casillas.
+Tener más casillas que guías solo la hace menos frecuente: con α = 0,25 la
+cadena recorrida promedió 0,21 guías, no 0.
 
-Con m = 7: 10 = 7·1 + 3, 24 = 7·3 + 3 y 17 = 7·2 + 3; las tres van a la 3.
+Con m = 7: 10, 24 y 17 dan residuo 3, las tres van a la casilla 3.
 
-- **Encadenamiento** (mi implementación): la casilla 3 guarda una lista
-  17 → 24 → 10. Ventaja: nunca se llena y borrar es sencillo. Costo: memoria
-  para los enlaces y saltos por punteros; si α crece, la cadena se alarga.
-- **Direccionamiento abierto** (sondeo lineal): 10 ocupa la 3, 24 prueba 3 y
-  queda en 4, 17 prueba 3 y 4 y queda en 5. Ventaja: todo vive en un arreglo,
-  sin punteros. Costo: α no puede pasar de 1, las rachas ocupadas crecen
-  (una guía que caiga en 4 ahora va a la 6) y al borrar hay que dejar lápidas.
+- **Encadenamiento** (lo que implementé): la casilla 3 guarda la lista
+  17 → 24 → 10. A favor: nunca se llena y borrar es quitar un nodo. En
+  contra: cada nodo gasta memoria en el enlace y con α grande las cadenas se
+  alargan.
+- **Direccionamiento abierto** con sondeo lineal: 10 ocupa la 3; 24 la
+  encuentra ocupada y queda en la 4; 17 prueba 3 y 4 y queda en la 5. A
+  favor: todo vive en un arreglo, sin enlaces. En contra: α no puede pasar
+  de 1, los bloques ocupados crecen (una guía que caiga en la 4 iría hasta la
+  6) y al borrar hay que dejar una lápida.
 
 ### 4. Tabla hash o árbol de búsqueda
 
-La tabla no sirve para "guías entre X y Y": `guia % m` desordena a propósito
-las guías, y guías consecutivas quedan en casillas lejanas. La única forma es
-revisar las n guías, Θ(n), en cada consulta.
+La tabla no sirve para "guías entre X y Y": el módulo manda guías vecinas a
+casillas sin relación, así que toca revisar las n guías, Θ(n), en cada
+consulta. Un BST sí guarda el orden: bajo hasta X en Θ(h) y el recorrido en
+orden me da las k guías del rango, Θ(h + k).
 
-Un BST guarda las guías ordenadas: se baja hasta X en Θ(h) y desde ahí el
-recorrido en orden entrega las k guías del rango, Θ(h + k).
-
-Pero si las 400.000 guías llegan ordenadas, cada una es mayor que todas las
-anteriores y se cuelga a la derecha de la última: el árbol es una fila de
-altura **h = n − 1 = 399.999**. Insertar la i-ésima cuesta i − 1
-comparaciones; en total n(n−1)/2 ≈ **8·10¹⁰**. Con mi costo de unos 23 ns por
-nodo recorrido serían unos 30 minutos solo en construirlo, y cada consulta de
-rango costaría Θ(n). Equilibrado, h ≈ log₂ 400.000 ≈ **18** y la construcción
-cuesta n·log₂ n ≈ **7,4·10⁶** comparaciones, unas 10.000 veces menos.
+Pero si las 400.000 guías del enunciado llegan ordenadas, cada una se cuelga
+a la derecha de la anterior y el árbol es una fila de altura
+**h = n − 1 = 399.999**. Colgar la i-ésima pasa por las i − 1 anteriores:
+n(n − 1)/2 ≈ **8·10¹⁰** comparaciones. Equilibrado, h ≈ log₂ 400.000 ≈ **18**
+y construirlo cuesta n·log₂ n ≈ **7,4·10⁶**, unas 10.000 veces menos. No
+medí el árbol; si un nodo del árbol cuesta lo mismo que uno de mi lista
+(23,2 ns, ver pregunta 5), el árbol degenerado tardaría unos 30 minutos en
+construirse.
 
 ### 5. Concepto para la jefa de operaciones
 
-Recomiendo **combinar**, sobre los mismos envíos, una **tabla hash** para el
-call center y un **árbol de búsqueda balanceado** (AVL o rojo-negro, no un BST
-simple, porque las guías llegan en orden) para el monitoreo por rango.
+Recomiendo **las dos estructuras sobre los mismos envíos**: una **tabla hash**
+para el call center y un **árbol balanceado** (AVL o rojo-negro) para los
+rangos. Un BST simple no, porque con guías en orden se vuelve una lista.
 
 *Estimación, no medición*, para 5.000.000 de envíos y una guía inexistente:
 
-| Estructura | Modelo | Tiempo por búsqueda |
+| Estructura | De dónde sale | Tiempo por búsqueda |
 | --- | --- | ---: |
-| Lista enlazada | 23,2 ns × n | ≈ **116 ms** |
-| Tabla hash (α ≈ 2) | constante | ≈ **0,17 µs** |
+| Lista enlazada | 23,2 ns × 5·10⁶ | ≈ **116 ms** |
+| Tabla hash (α ≈ 2) | lo medido, no depende de n | ≈ **0,17 µs** |
 
-Razonamiento: la lista dobla su tiempo cada vez que n se duplica, así que es
-una recta que pasa por el origen; ajusté su pendiente con los cuatro n más
-grandes (23,2 ns por nodo) y la evalué en 5·10⁶. La tabla no creció con n
-mientras α se mantuvo en 2, así que su estimación es lo medido, siempre que m
-crezca a un primo cercano a 2.500.000. 1.000 consultas costarían casi 2 minutos en la
-lista y menos de un milisegundo en la tabla. Supuestos: mismo equipo y Python; con 5 millones de nodos la memoria caché
-ayudaría menos, así que la lista podría tardar incluso más.
+No es una regla de tres a ciegas: en mi gráfica la lista duplica su tiempo al
+duplicar n, o sea, es una recta que pasa por el origen. Los 23,2 ns son su
+pendiente, ajustada con mis cuatro n más grandes (`estimar` en
+`medicion.py`). La tabla no creció con n mientras α = 2, así que uso lo
+medido, siempre que m crezca con los envíos: un primo cercano a
+5.000.000 / 2 = 2.500.000. Con el mismo modelo, los 400.000 envíos actuales
+ya cuestan unos 9 ms por búsqueda en la lista.
+
+Supuestos: mismo equipo (i7-14700HX) y Python 3.14. Con 5 millones de nodos
+la caché ayuda menos, así que la lista podría tardar aún más.
