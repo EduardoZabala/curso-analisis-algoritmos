@@ -389,6 +389,38 @@ def estimar(resultados: dict[str, list[float]]) -> None:
           f"tabla {1000 * t_tabla * 1e3:.2f} ms")
 
 
+def control_peor_caso() -> None:
+    """Caso de control: una tabla de una sola casilla (m = 1).
+
+    Con m = 1 todas las guias caen en la misma cadena, que es el peor caso
+    de la funcion hash. La tabla deberia tardar lo mismo que la lista (un
+    poco mas, por calcular la casilla), mientras que con m cercano a n / 2
+    deberia quedar en el orden de la medicion del experimento A.
+    """
+    envios = generar_envios(N_FIJO_B)
+    inexistentes = generar_guias_inexistentes(
+        {guia for guia, _ in envios}, BUSQUEDAS)
+    lista = construir(envios, None)
+    casos: list[tuple[str, Estructura]] = [
+        ("Lista enlazada", lista),
+        ("Tabla hash, m = 1", construir(envios, 1)),
+        ("Tabla hash, m ~ n/2",
+         construir(envios, primo_cercano(N_FIJO_B / ALFA_OBJETIVO_A))),
+    ]
+    print(f"Control de peor caso (n = {N_FIJO_B:,})")
+    print("| Estructura | alfa | Tiempo por busqueda (us) |")
+    print("| --- | ---: | ---: |")
+    for nombre, estructura in casos:
+        if isinstance(estructura, TablaHash):
+            verificar(envios, inexistentes, lista, estructura)
+            alfa = f"{estructura.factor_carga():,.0f}"
+        else:
+            alfa = "-"
+        tiempo = mediana_de(estructura, inexistentes)
+        print(f"| {nombre} | {alfa} | {tiempo * 1e6:.3f} |")
+    print()
+
+
 def main() -> None:
     """Corre ambos experimentos, las graficas y la estimacion."""
     resultados = experimento_a()
@@ -396,6 +428,7 @@ def main() -> None:
     graficar_a(resultados)
     alfas, tiempos, _ = experimento_b()
     graficar_b(alfas, tiempos)
+    control_peor_caso()
     estimar(resultados)
 
 

@@ -32,7 +32,7 @@ python medicion.py                 # Parte 2: tablas + las dos gráficas + estim
 ```
 
 `pruebas.py` termina con `Todas las pruebas pasaron.`; si algún caso falla, se
-detiene con un `AssertionError` que dice cuál. `medicion.py` tarda unos 10
+detiene con un `AssertionError` que dice cuál. `medicion.py` tarda unos 12
 segundos e imprime las tablas que aparecen en este informe. Las guías se
 generan con semilla `42` y las inexistentes con semilla `7`, así que los datos
 son idénticos en cualquier máquina; los tiempos cambian entre equipos, pero no
@@ -148,6 +148,18 @@ cada búsqueda infructuosa, es decir, cuántas guías comparó.
 | 10 | 1999 | 10.005 | 9.66 | 0.374 |
 
 Ajuste por mínimos cuadrados: **tiempo ≈ 0,096 + 0,029·α µs**.
+
+**Caso de control: peor caso de la función hash.** Con n = 20.000 construí
+también una tabla de **una sola casilla** (m = 1), donde todas las guías caen
+en la misma cadena. Si la implementación es correcta, debe tardar lo mismo que
+la lista, y así fue (función `control_peor_caso`, 200 búsquedas, mediana de
+15):
+
+| Estructura | α | Tiempo por búsqueda (µs) |
+| --- | ---: | ---: |
+| Lista enlazada | — | 462,9 |
+| Tabla hash, m = 1 | 20.000 | 466,8 |
+| Tabla hash, m = 10.007 | 2 | 0,168 |
 
 ---
 
