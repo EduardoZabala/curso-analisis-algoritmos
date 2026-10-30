@@ -61,7 +61,7 @@ Excelente trabajo: un informe completo, con datos propios y muy bien sustentado.
 - Solo hay un commit que contiene el laboratorio completo. Se pedían al menos cinco commits descriptivos que muestren el avance. Haga commits pequeños y frecuentes, por ejemplo uno por cada parte.
 
 ## ¿El código funciona?
-Sí. Los scripts corren sin errores, los algoritmos ordenan bien (probé con listas aleatorias y con casos pequeños) y las gráficas se generan.
+Sí. Los scripts corren sin errores, los algoritmos ordenan bien (con listas aleatorias y con casos pequeños) y las gráficas se generan.
 
 ## Para el próximo laboratorio
 - Haga commits frecuentes, uno por cada avance importante, con mensajes que digan qué se hizo.
